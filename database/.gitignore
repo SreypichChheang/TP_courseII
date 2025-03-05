@@ -1,1 +1,35 @@
-*.sqlite*
+# Laravel environment files
+.env
+.env.*
+
+# Laravel Composer files
+/vendor
+/node_modules
+
+# Laravel log files
+/storage/*.key
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+
+# Laravel IDE helper files
+/.phpstorm.meta.php
+/.vscode/
+
+# Laravel cache files
+/public/storage
+/public/hot
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NPM log files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Laravel package manager lock files
+composer.lock
+package-lock.json
