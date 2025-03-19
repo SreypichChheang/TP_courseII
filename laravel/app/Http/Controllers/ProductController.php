@@ -1,4 +1,5 @@
-<?PHP
+<?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,19 +18,18 @@ class ProductController extends Controller
             "data" => $products
         ], 200);
     }
-
-    // Create a new product - POST /api/products
     public function createProduct(Request $request): JsonResponse
     {
 
-        $product = Product::create($request->all());
+    $product = Product::create($request->all());
 
-        return response()->json([
-            "success" => true,
-            "message" => "Creating a new product",
-            "data" => $product
-        ], 201);
-    }
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Product created successfully',
+        'data' => $product
+    ], 201);
+    dd("hello");
+}
 
     // Get a specific product - GET /api/products/{productId}
     public function getProduct($productId): JsonResponse
@@ -62,13 +62,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'price' => 'sometimes|numeric|min:0',
-            'category_id' => 'sometimes|exists:categories,id'
-        ]);
-
-        $product->update($validated);
+        $product->update($request->all());
 
         return response()->json([
             "success" => true,

@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
@@ -17,16 +15,14 @@ return new class extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->double('price');
             $table->text('description')->nullable();
-            $table->jsonb('images')->nullable();
+            $table->jsonb(' images')->nullable();
             $table->timestamps();
-            // Foreign key constraint
+
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('products');

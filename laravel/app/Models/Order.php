@@ -1,18 +1,21 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Order extends Model
 {
-    protected $fillable = ['customer_id', 'total_price', 'order_date'];
+    use SoftDeletes;  // Enable soft deletes
+    use HasFactory;
+    protected $table = 'orders'; // Define the table name (optional if it matches the default)
+    // Mass Assignment
+    protected $fillable = ['customer_id', 'status', 'total_amount', 'order_date'];
 
+    // Relationships
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -27,13 +30,16 @@ class Order extends Model
     {
         return $this->hasMany(OrderProduct::class);
     }
-    public function getOrderDateAttribute($value)
-{
-    return Carbon::parse($value)->format('d/m/Y H:i:s');
-}
 
-public function setOrderDateAttribute($value)
-{
-    $this->attributes['order_date'] = Carbon::createFromFormat('d/m/Y H:i:s', $value)->toDateTimeString();
-}
+    // Mutator and Accessor for order_date
+    protected function orderDate(): Attribute
+    {
+        return Attribute::make(
+            // Mutator: Convert input format to MySQL format before saving
+            set: fn($value) => Carbon::createFromFormat('d/m/Y H:i:s', $value)->format('Y-m-d H:i:s'),
+
+            // Accessor: Convert database format to user-friendly format when retrieving
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y H:i:s')
+        );
+    }
 }

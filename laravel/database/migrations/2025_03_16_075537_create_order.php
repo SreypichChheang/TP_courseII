@@ -4,22 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    public function up(): void
+return new class extends Migration {
+    public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('order_date');
-            $table->decimal('total_price', 10, 2)->nullable();
-            $table->unsignedBigInteger('customer_id')->nullable();
-            $table->timestamps();
+            $table->timestamp('order_date')->useCurrent();
+            $table->decimal('total_price', 10, 2);
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
 
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('set null');
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('orders');
     }

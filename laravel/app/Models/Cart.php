@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cart extends Model
 {
-    protected $fillable = ['product_id', 'customer_id', 'quantity'];
+    use HasFactory;
 
+    // Mass Assignment
+    protected $fillable = ['customer_id', 'product_id', 'quantity'];
+
+    // Relationships
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -18,5 +21,10 @@ class Cart extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class);
     }
 }

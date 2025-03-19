@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Wishlist extends Model
 {
-    protected $fillable = ['product_id', 'customer_id'];
+    use HasFactory;
 
+    // Mass Assignment
+    protected $fillable = ['customer_id', 'product_id'];
+
+    // Relationships
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -20,3 +23,4 @@ class Wishlist extends Model
         return $this->belongsTo(Product::class);
     }
 }
+

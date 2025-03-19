@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Observers;
 
 use App\Models\ActivityLog;
@@ -6,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModelActivityObserver
 {
-    public function created(Model $model)
+    /**
+     * Handle the "created" event.
+     */
+    public function created(Model $model): void
     {
         ActivityLog::create([
             'model'    => get_class($model),
@@ -16,7 +20,10 @@ class ModelActivityObserver
         ]);
     }
 
-    public function updated(Model $model)
+    /**
+     * Handle the "updated" event.
+     */
+    public function updated(Model $model): void
     {
         ActivityLog::create([
             'model'    => get_class($model),
@@ -29,7 +36,10 @@ class ModelActivityObserver
         ]);
     }
 
-    public function deleted(Model $model)
+    /**
+     * Handle the "deleted" event (soft delete).
+     */
+    public function deleted(Model $model): void
     {
         ActivityLog::create([
             'model'    => get_class($model),

@@ -4,31 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'description', 'images', 'category_id'];
+    // Mass Assignment
+    protected $fillable = ['name', 'price', 'category_id'];
 
-    public function category(): BelongsTo
+    // Relationships
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function carts(): HasMany
+    public function carts()
     {
         return $this->hasMany(Cart::class);
     }
 
-    public function wishlists(): HasMany
+    public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
     }
 
-    public function orderProducts(): HasMany
+    public function orderProducts()
     {
         return $this->hasMany(OrderProduct::class);
     }
