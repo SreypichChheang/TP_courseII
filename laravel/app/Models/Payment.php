@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 
 class Payment extends Model
 {
-    protected $fillable = ['customer_id', 'order_id', 'amount'];
+    // Disable timestamps for this model
+    public $timestamps = false;
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
+    protected $fillable = ['payment_method', 'amount', 'payment_date', 'order_id', 'customer_id'];
 
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 }

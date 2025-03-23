@@ -8,11 +8,11 @@ return new class extends Migration {
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('model'); // Model name
-            $table->unsignedBigInteger('model_id')->nullable(); // Record ID
-            $table->string('action'); // create, update, delete
-            $table->json('changes')->nullable(); // Stores old and new data
-            $table->timestamp('created_at')->useCurrent();
+            $table->string('model');
+            $table->unsignedBigInteger('model_id');
+            $table->string('action');
+            $table->text('changes');
+            $table->timestamps(); // Ensure timestamps exist
         });
     }
 

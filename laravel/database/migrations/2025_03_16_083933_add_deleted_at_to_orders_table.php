@@ -5,17 +5,19 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
+    public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->softDeletes(); // Adds a deleted_at column
-        });
+        if (!Schema::hasColumn('orders', 'deleted_at')) { // Check before adding
+            Schema::table('orders', function (Blueprint $table) {
+                $table->softDeletes();
+            });
+        }
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            $table->dropColumn('deleted_at');
         });
     }
 };

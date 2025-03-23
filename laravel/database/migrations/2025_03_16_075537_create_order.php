@@ -9,10 +9,14 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('order_date')->useCurrent();
+            $table->unsignedBigInteger('customer_id');
             $table->decimal('total_price', 10, 2);
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->date('order_date'); // Stores date in YYYY-MM-DD format
+            $table->timestamps();
+            $table->softDeletes(); // Enable soft deletes
 
+            // Foreign Key Constraint
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 
