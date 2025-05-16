@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
 {
-    // Disable timestamps for this model
-    public $timestamps = false;
-
-    protected $fillable = ['payment_method', 'amount', 'payment_date', 'order_id', 'customer_id'];
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
-    }
+    use HasFactory;
+    protected $fillable = ['order_id', 'customer_id', 'payment_date', 'payment_method', 'amount'];
 
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

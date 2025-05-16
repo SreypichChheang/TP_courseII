@@ -4,33 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UploadController extends Controller
 {
     public function upload(Request $request)
     {
-        // Validate the incoming file
         $request->validate([
             'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // Store file locally on the 'public' disk (storage/app/public/uploads)
-        $path = $request->file('document')->store('uploads', 'public');
+        $file = $request->file('document');
+        $extension = strtolower($file->getClientOriginalExtension()); //ex: .jpg or png....
+        $fileName = uniqid() . '.' . $extension; // Generate a unique file name for the uploaded file
 
-        // Generate public URL for the stored file
-        $publicUrl = Storage::disk('public')->url($path);
+        // Store original file to local 'public' disk
+        $localPath = $file->storeAs('uploads', $fileName, 'public');
 
-        // Store the file on MinIO disk (e.g., configured in config/filesystems.php)
-        $minioPath = $request->file('document')->store('uploads', 'minio');
+        // Upload original file to MinIO
+        $minioOriginalPath = 'uploads/' . $fileName;
+        Storage::disk('minio')->put($minioOriginalPath, file_get_contents($file));
 
-        // Get the MinIO URL via Laravel Storage
-        $minioUrl = Storage::disk('minio')->url($minioPath);
+        $isImage = in_array($extension, ['jpg', 'jpeg', 'png']);
+        $thumbnailLocalPath = null; // Initialize/create thumbnail local path
+        $thumbnailMinioPath = null;
 
-        // Return JSON response with both URLs
+        if ($isImage) {
+            // Generate thumbnail
+            $thumbnail = Image::make($file->getRealPath())
+                ->fit(200, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->encode($extension, 90); //quality percentage
+
+            // Local thumbnail path
+            $thumbnailLocalPath = 'thumbnails/' . $fileName;
+            Storage::disk('public')->put($thumbnailLocalPath, $thumbnail->__toString());
+
+            // MinIO thumbnail path
+            $thumbnailMinioPath = 'thumbnails/' . $fileName;
+
+
+
+            // Upload thumbnail to MinIO
+            Storage::disk('minio')->put($thumbnailMinioPath, $thumbnail->__toString());
+        }
+
         return response()->json([
-            'path' => $path,
-            'public_url' => $publicUrl,
-            'minio_url' => $minioUrl,
-        ], 200);
+            'local_path' => $localPath ? 'storage/' . $localPath : false,
+            'minio_path' => $minioOriginalPath,
+            'thumbnail_local' => $thumbnailLocalPath ? 'storage/' . $thumbnailLocalPath : null,
+            'thumbnail_minio' => $thumbnailMinioPath,
+        ], 200); //success response
     }
 }

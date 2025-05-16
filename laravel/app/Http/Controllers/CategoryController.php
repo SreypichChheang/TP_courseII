@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         return response()->json([
-            "message" => "Getting list of categories",
+            "message" => "Categories retrieved successfully",
             "data" => $categories
         ], 200);
     }
@@ -27,7 +28,7 @@ class CategoryController extends Controller
         $category = Category::create($validated);
 
         return response()->json([
-            "message" => "Creating a new category",
+            "message" => "Category created successfully",
             "data" => $category
         ], 201);
     }
@@ -44,7 +45,7 @@ class CategoryController extends Controller
         }
 
         return response()->json([
-            "message" => "Getting category based on given categoryId",
+            "message" => "Category retrieved successfully",
             "data" => $category
         ], 200);
     }
@@ -67,7 +68,7 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return response()->json([
-            "message" => "Updating category based on given categoryId",
+            "message" => "Category updated successfully",
             "data" => $category
         ], 200);
     }
@@ -86,7 +87,7 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json([
-            "message" => "Deleting category based on given categoryId"
+            "message" => "Category deleted successfully"
         ], 200);
     }
 }

@@ -59,15 +59,18 @@ return [
             'throw' => false,
             'report' => false,
         ],
-
+        
         'minio' => [
-            'driver' => 's3', // MinIO uses the S3 driver
+            'driver' => 's3',
             'key' => env('MINIO_ACCESS_KEY_ID'),
             'secret' => env('MINIO_SECRET_ACCESS_KEY'),
             'region' => env('MINIO_REGION', 'us-east-1'),
             'bucket' => env('MINIO_BUCKET'),
             'endpoint' => env('MINIO_ENDPOINT'),
-            'use_path_style_endpoint' => true, // Required for MinIO
+            'use_path_style_endpoint' => true,  // This is crucial for MinIO!
+            'url' => env('MINIO_URL'),  // Add this for generating URLs
+            'visibility' => 'public',    // Add default visibility
+            'throw' => false,
         ],
 
     ],

@@ -4,24 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderProduct extends Model
 {
-    use HasFactory;
-    protected $table="order_product";
+    use HasFactory, SoftDeletes;
 
-    // Mass Assignment
-    protected $fillable = ['order_id', 'product_id', 'quantity'];
+    protected $table = 'order_product';
+    protected $dates = ['deleted_at']; // Ensure deleted_at is treated as a date
+    protected $fillable = ['order_id', 'product_id', 'quantity', 'price'];
 
-    // Relationships
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function order()
+    public function orders()
     {
         return $this->belongsTo(Order::class);
     }
 }
-
