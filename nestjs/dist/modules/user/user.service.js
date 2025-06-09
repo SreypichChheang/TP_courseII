@@ -29,7 +29,7 @@ let UsersService = class UsersService {
     getUser(username) {
         return this.usersRepo.findOne({
             where: { username },
-            relations: ['tasks'],
+            relations: ["tasks"],
         });
     }
     async updateUser(username, body) {
@@ -38,8 +38,15 @@ let UsersService = class UsersService {
     deleteUser(username) {
         return this.usersRepo.delete({ username });
     }
+    async findOne(id) {
+        const user = await this.usersRepo.findOne({ where: { id } });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with id ${id} not found`);
+        }
+        return user;
+    }
     findAll() {
-        return this.usersRepo.find({ relations: ['tasks'] });
+        return this.usersRepo.find({ relations: ["tasks"] });
     }
 };
 exports.UsersService = UsersService;

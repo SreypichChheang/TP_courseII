@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => task_entity_1.Task, task => task.user),
+    (0, typeorm_1.OneToMany)(() => task_entity_1.Task, (task) => task.user),
     __metadata("design:type", Array)
 ], User.prototype, "tasks", void 0);
 exports.User = User = __decorate([

@@ -1,12 +1,12 @@
-import { TaskService } from './task.service';
-import { Task } from './task.entity';
+import { TaskService } from "./task.service";
+import { CreateTaskDto } from "./dto/create-task.dto";
 export declare class TasksController {
     private readonly taskService;
     constructor(taskService: TaskService);
-    findAll(): Promise<Task[]>;
-    getTask(id: string): Promise<Task | null>;
-    createTask(body: Partial<Task>): Promise<Task>;
-    markTaskAsDone(id: string): Promise<Task | null>;
-    markTaskAsPending(id: string): Promise<Task | null>;
-    deleteTask(id: string): Promise<import("typeorm").DeleteResult>;
+    findAll(): Promise<import("./task.entity").Task[]>;
+    getTask(id: number): Promise<import("./task.entity").Task>;
+    create(createTaskDto: CreateTaskDto): Promise<import("./task.entity").Task>;
+    markTaskAsDone(id: number): Promise<import("./task.entity").Task>;
+    markTaskAsPending(id: number): Promise<import("./task.entity").Task>;
+    deleteTask(id: number): Promise<import("./task.entity").Task>;
 }

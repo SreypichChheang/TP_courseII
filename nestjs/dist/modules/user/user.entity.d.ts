@@ -1,4 +1,4 @@
-import { Task } from '../task/task.entity';
+import { Task } from "../task/task.entity";
 export declare class User {
     id: number;
     username: string;

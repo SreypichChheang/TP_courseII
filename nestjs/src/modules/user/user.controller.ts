@@ -6,11 +6,14 @@ import {
   Body,
   Patch,
   Delete,
-} from '@nestjs/common';
-import { UsersService } from './user.service';
+  UsePipes,
+  ValidationPipe,
+  ParseIntPipe,
+} from "@nestjs/common";
+import { UsersService } from "./user.service";
+import { CreateUserDto } from "./dto/create-user.dto";
 
-
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -18,29 +21,29 @@ export class UsersController {
   findAll() {
     return this.userService.findAll();
   }
-  
-  @Get('/:username')
-  getUser(@Param('username') username: string) {
-    return this.userService.getUser(username);
+
+  // Use ParseIntPipe to automatically convert and validate 'id' param as a number
+  @Get("/:id")
+  async getUserById(@Param("id", ParseIntPipe) id: number) {
+    return await this.userService.findOne(id);
   }
 
   @Post()
-  createUser(
-    @Body() body: { username: string; email: string; password: string },
-  ) {
-    return this.userService.createUser(body);
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
-  @Patch('/:username')
+  @Patch("/:username")
   updateUser(
-    @Param('username') username: string,
-    @Body() body: { email?: string; password?: string },
+    @Param("username") username: string,
+    @Body() body: { email?: string; password?: string }
   ) {
     return this.userService.updateUser(username, body);
   }
 
-  @Delete('/:username')
-  deleteUser(@Param('username') username: string) {
+  @Delete("/:username")
+  deleteUser(@Param("username") username: string) {
     return this.userService.deleteUser(username);
   }
 }

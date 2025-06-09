@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { User } from "./user.entity";
 
 @Injectable()
 export class UsersService {
@@ -11,6 +11,7 @@ export class UsersService {
   ) {}
 
   createUser(body: Partial<User>) {
+    // body can have any subset of the properties defined in the User entity.
     const user = this.usersRepo.create(body);
     return this.usersRepo.save(user);
   }
@@ -18,7 +19,7 @@ export class UsersService {
   getUser(username: string) {
     return this.usersRepo.findOne({
       where: { username },
-      relations: ['tasks'], // if needed
+      relations: ["tasks"], // if needed
     });
   }
 
@@ -29,8 +30,15 @@ export class UsersService {
   deleteUser(username: string) {
     return this.usersRepo.delete({ username });
   }
+  async findOne(id: number) {
+    const user = await this.usersRepo.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
 
   findAll() {
-    return this.usersRepo.find({ relations: ['tasks'] });
+    return this.usersRepo.find({ relations: ["tasks"] });
   }
 }
