@@ -1,0 +1,26 @@
+type Booking {
+  id: Int!
+  start_date: String!   
+  end_date: String!     
+  hotel_id: Int!
+  is_checked_in: Boolean!
+  price: Float!
+}
+
+type Query {
+  bookings: [Booking!]!
+  booking(id: Int!): Booking
+  bookingsByDateRange(start: String!, end: String!): [Booking!]!
+}
+
+type Mutation {
+  bookHotel(
+    start_date: String!
+    end_date: String!
+    hotel_id: Int!
+    price: Float!
+  ): Booking!
+
+  cancelBooking(id: Int!): Boolean!
+  checkInBooking(id: Int!): Booking!
+}
